@@ -19,6 +19,12 @@ names(col_pal) <- c("black", "orange", "lightblue", "brightgreen",
                     "brightyellow", "blue", "red", "pink")
 select <- dplyr::select
 
+##
+
+# Task 1 ------------------------------------------------------------------
+
+##
+
 sp5 <- read.csv("sp500_monthly.csv", header = TRUE, dec = ".", sep = ",")
 sp5 <- sp5 %>%
   mutate(Date = as.Date(Date))
@@ -153,7 +159,7 @@ plot_index_nom_v_real
 
 ##
 
-# 2) ---------------------------------------------------------------------
+# Task 2 ---------------------------------------------------------------------
 
 ## 
 
@@ -161,7 +167,7 @@ expert <- read.csv("expert.csv", header = TRUE, sep = ",", dec = ".")
 
 # Data expressed as balance: Everyone thinks inflation will go down (up, stay the same) - value of 100 (-100, 0)
 
-# 2a) ---------------------------------------------------------------------
+# a) ---------------------------------------------------------------------
 
 summary(expert)
 
@@ -270,7 +276,7 @@ expert_us %>%
 # - This means that the forecasts tend to over-predict the actual outcomes, indicating potential bias in the forecasting models. (
 #   actual value is lower than the expected one)
 
-# 2b) ---------------------------------------------------------------------
+# b) ---------------------------------------------------------------------
 
 # Common procedure is to conduct a Box and Pierce Test. Therefore, we need to compute the autocovariance function first
 
@@ -334,4 +340,17 @@ plot_acfs_us
 
 Box.test(expert_us$E_BAL_I3_US, lag = 12, type = "Box-Pierce")
 
+# Alternatively perform Breusch-Godfrey test for higher-order serial correlation of the residuals of the forecast errors
+p <- 12
+bgtest(lm(E_BAL_P_US ~ 1, data = expert_us), order = p)
+bgtest(lm(E_BAL_Y_US ~ 1, data = expert_us), order = p)
+bgtest(lm(E_BAL_I3_US ~ 1, data = expert_us), order = p)
+
+# H0 of serially uncorrelated observations can be rejected for every variable testedˆ
+
+##
+
+# Task 3 ------------------------------------------------------------------
+
+##
 
